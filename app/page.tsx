@@ -1,3 +1,5 @@
+"use client";
+import { useState, useEffect } from 'react';
 import { fetchMarketingData } from '../src/lib/api';
 import { MarketingData } from '../src/types/marketing';
 import { Navbar } from '../src/components/ui/navbar';
@@ -5,16 +7,27 @@ import { CardMetric } from '../src/components/ui/card-metric';
 import { Footer } from '../src/components/ui/footer';
 import { Target, DollarSign, TrendingUp, Users, Calendar, Clock, ShoppingBag, MapPin } from 'lucide-react';
 
-export default async function Home() {
-  let marketingData: MarketingData | null = null;
-  let error: string | null = null;
+export default function Home() {
+  const [marketingData, setMarketingData] = useState<MarketingData | null>(null);
+  const [error, setError] = useState<string | null>(null);
+  const [loading, setLoading] = useState(true);
 
-  try {
-    marketingData = await fetchMarketingData();
-  } catch (err) {
-    error = err instanceof Error ? err.message : 'Failed to load data';
-    console.error('Error loading marketing data:', err);
-  }
+  // Load data on component mount
+  useEffect(() => {
+    const loadData = async () => {
+      try {
+        const data = await fetchMarketingData();
+        setMarketingData(data);
+      } catch (err) {
+        setError(err instanceof Error ? err.message : 'Failed to load data');
+        console.error('Error loading marketing data:', err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    loadData();
+  }, []);
 
   return (
     <div className="flex h-screen bg-gray-900">
@@ -30,6 +43,12 @@ export default async function Home() {
                 <div className="bg-red-900 border border-red-700 text-red-200 px-4 py-3 rounded mb-4 max-w-2xl mx-auto">
                   Error loading data: {error}
                 </div>
+              ) : loading ? (
+                <div className="animate-pulse">
+                  <div className="h-10 bg-white/20 rounded mb-4 max-w-md mx-auto"></div>
+                  <div className="h-6 bg-white/20 rounded mb-4 max-w-sm mx-auto"></div>
+                  <div className="h-4 bg-white/20 rounded max-w-3xl mx-auto"></div>
+                </div>
               ) : marketingData ? (
                 <>
                   <h1 className="text-3xl md:text-5xl font-bold mb-4">
@@ -42,20 +61,18 @@ export default async function Home() {
                     {marketingData.company_info.description}
                   </p>
                 </>
-              ) : (
-                <div className="animate-pulse">
-                  <div className="h-10 bg-white/20 rounded mb-4 max-w-md mx-auto"></div>
-                  <div className="h-6 bg-white/20 rounded mb-4 max-w-sm mx-auto"></div>
-                  <div className="h-4 bg-white/20 rounded max-w-3xl mx-auto"></div>
-                </div>
-              )}
+              ) : null}
             </div>
           </div>
         </section>
 
         {/* Dashboard Content */}
         <div className="flex-1 p-4 lg:p-6 overflow-y-auto">
-          {marketingData && (
+          {loading ? (
+            <div className="flex items-center justify-center h-64">
+              <div className="text-white">Loading...</div>
+            </div>
+          ) : marketingData && (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
               {/* Key Metrics Cards */}
               <CardMetric
@@ -141,6 +158,7 @@ export default async function Home() {
                 />
               </div>
             </div>
+          )}
           )}
         </div>
 
