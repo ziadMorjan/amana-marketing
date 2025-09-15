@@ -67,11 +67,11 @@ export default function CampaignView() {
   }
 
   return (
-    <div className="flex h-screen bg-gray-900">
+    <div className="flex flex-col lg:flex-row min-h-screen bg-gray-900">
       <Navbar />
       
       {/* Main Content Area */}
-      <div className="flex-1 flex flex-col transition-all duration-300 ease-in-out">
+      <div className="flex-1 flex flex-col transition-all duration-300 ease-in-out overflow-hidden">
         {/* Hero Section */}
         <section className="bg-gradient-to-r from-gray-800 to-gray-700 text-white py-8 sm:py-12">
           <div className="px-4 sm:px-6 lg:px-8">
@@ -90,7 +90,7 @@ export default function CampaignView() {
         </section>
 
         {/* Content Area */}
-        <div className="flex-1 p-3 sm:p-4 lg:p-6 overflow-y-auto">
+        <div className="flex-1 p-3 sm:p-4 lg:p-6 overflow-y-auto w-full max-w-full">
           {marketingData && (
             <>
               {/* Filters Section */}
@@ -118,14 +118,14 @@ export default function CampaignView() {
               </div>
 
               {/* Results Summary */}
-              <div className="mb-6">
-                <p className="text-gray-400">
+              <div className="mb-4 sm:mb-6">
+                <p className="text-gray-400 text-sm sm:text-base">
                   Showing {filteredCampaigns.length} of {marketingData.campaigns.length} campaigns
                 </p>
               </div>
 
               {/* Campaign Overview Metrics - Updated with filtered data */}
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
+              <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 mb-6 sm:mb-8">
                 <CardMetric
                   title="Filtered Campaigns"
                   value={filteredCampaigns.length}
@@ -152,7 +152,7 @@ export default function CampaignView() {
               </div>
 
               {/* Campaign Performance Charts */}
-              <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
+              <div className="grid grid-cols-1 xl:grid-cols-2 gap-4 sm:gap-6 mb-6 sm:mb-8">
                 {/* Top Campaigns by Revenue */}
                 <BarChart
                   title="Top Campaigns by Revenue (Filtered)"
@@ -177,7 +177,7 @@ export default function CampaignView() {
               </div>
 
               {/* Campaign Medium & Device Performance */}
-              <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
+              <div className="grid grid-cols-1 xl:grid-cols-2 gap-4 sm:gap-6 mb-6 sm:mb-8">
                 {/* Performance by Medium */}
                 <BarChart
                   title="Campaign Performance by Medium (Filtered)"
@@ -215,10 +215,11 @@ export default function CampaignView() {
               </div>
 
               {/* Campaign Details Table */}
-              <Table
-                title={`Campaign Details (${filteredCampaigns.length} campaigns)`}
-                showIndex={true}
-                maxHeight="500px"
+              <div className="overflow-x-auto w-full max-w-full">
+                <Table
+                  title={`Campaign Details (${filteredCampaigns.length} campaigns)`}
+                  showIndex={true}
+                  maxHeight="400px"
                 columns={[
                   {
                     key: 'name',
@@ -227,8 +228,13 @@ export default function CampaignView() {
                     sortable: true,
                     sortType: 'string',
                     render: (value) => (
-                      <div className="font-medium text-white">
-                        {value.length > 30 ? `${value.substring(0, 30)}...` : value}
+                      <div className="font-medium text-white text-sm sm:text-base">
+                        <span className="hidden sm:inline">
+                          {value.length > 30 ? `${value.substring(0, 30)}...` : value}
+                        </span>
+                        <span className="sm:hidden">
+                          {value.length > 20 ? `${value.substring(0, 20)}...` : value}
+                        </span>
                       </div>
                     )
                   },
@@ -240,8 +246,9 @@ export default function CampaignView() {
                     sortable: true,
                     sortType: 'string',
                     render: (value) => (
-                      <span className="px-2 py-1 rounded-full text-xs font-medium bg-blue-900 text-blue-300">
-                        {value}
+                      <span className="px-1.5 sm:px-2 py-0.5 sm:py-1 rounded-full text-xs font-medium bg-blue-900 text-blue-300">
+                        <span className="hidden sm:inline">{value}</span>
+                        <span className="sm:hidden">{value.substring(0, 4)}</span>
                       </span>
                     )
                   },
@@ -253,12 +260,13 @@ export default function CampaignView() {
                     sortable: true,
                     sortType: 'string',
                     render: (value) => (
-                      <span className={`px-2 py-1 rounded-full text-xs font-medium ${
+                      <span className={`px-1.5 sm:px-2 py-0.5 sm:py-1 rounded-full text-xs font-medium ${
                         value === 'Active' ? 'bg-green-900 text-green-300' :
                         value === 'Paused' ? 'bg-yellow-900 text-yellow-300' :
                         'bg-gray-700 text-gray-300'
                       }`}>
-                        {value}
+                        <span className="hidden sm:inline">{value}</span>
+                        <span className="sm:hidden">{value.substring(0, 3)}</span>
                       </span>
                     )
                   },
@@ -277,7 +285,11 @@ export default function CampaignView() {
                     align: 'right',
                     sortable: true,
                     sortType: 'number',
-                    render: (value) => `$${value.toLocaleString()}`
+                    render: (value) => (
+                      <span className="text-xs sm:text-sm">
+                        ${value.toLocaleString()}
+                      </span>
+                    )
                   },
                   {
                     key: 'spend',
@@ -286,7 +298,11 @@ export default function CampaignView() {
                     align: 'right',
                     sortable: true,
                     sortType: 'number',
-                    render: (value) => `$${value.toLocaleString()}`
+                    render: (value) => (
+                      <span className="text-xs sm:text-sm">
+                        ${value.toLocaleString()}
+                      </span>
+                    )
                   },
                   {
                     key: 'revenue',
@@ -296,7 +312,7 @@ export default function CampaignView() {
                     sortable: true,
                     sortType: 'number',
                     render: (value) => (
-                      <span className="text-green-400 font-medium">
+                      <span className="text-green-400 font-medium text-xs sm:text-sm">
                         ${value.toLocaleString()}
                       </span>
                     )
@@ -317,7 +333,7 @@ export default function CampaignView() {
                     sortable: true,
                     sortType: 'number',
                     render: (value) => (
-                      <span className="text-blue-400 font-medium">
+                      <span className="text-blue-400 font-medium text-xs sm:text-sm">
                         {value.toFixed(1)}x
                       </span>
                     )
@@ -327,6 +343,7 @@ export default function CampaignView() {
                 data={filteredCampaigns}
                 emptyMessage="No campaigns match the current filters"
               />
+              </div>
             </>
           )}
         </div>

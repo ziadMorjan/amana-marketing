@@ -57,7 +57,7 @@ export function Navbar({ className = "" }: NavbarProps) {
   // Auto-open sidebar on desktop
   useEffect(() => {
     const handleResize = () => {
-      if (window.innerWidth >= 768) {
+      if (window.innerWidth >= 1024) {
         setIsOpen(true);
       } else {
         setIsOpen(false);
@@ -75,7 +75,7 @@ export function Navbar({ className = "" }: NavbarProps) {
   const handleItemClick = (itemId: string, href: string) => {
     setActiveItem(itemId);
     router.push(href);
-    if (window.innerWidth < 768) {
+    if (window.innerWidth < 1024) {
       setIsOpen(false);
     }
   };
@@ -85,7 +85,7 @@ export function Navbar({ className = "" }: NavbarProps) {
       {/* Mobile hamburger button */}
       <button
         onClick={toggleSidebar}
-        className="fixed top-6 left-6 z-50 p-3 rounded-lg bg-gray-800 shadow-md border border-gray-700 md:hidden hover:bg-gray-700 transition-all duration-200 cursor-pointer"
+        className="fixed top-6 left-6 z-50 p-3 rounded-lg bg-gray-800 shadow-md border border-gray-700 lg:hidden hover:bg-gray-700 transition-all duration-200 cursor-pointer"
         aria-label="Toggle sidebar"
       >
         {isOpen ? 
@@ -97,7 +97,7 @@ export function Navbar({ className = "" }: NavbarProps) {
       {/* Mobile overlay */}
       {isOpen && (
         <div 
-          className="fixed inset-0 bg-black/40 backdrop-blur-sm z-30 md:hidden transition-opacity duration-300" 
+          className="fixed inset-0 bg-black/40 backdrop-blur-sm z-30 lg:hidden transition-opacity duration-300" 
           onClick={toggleSidebar} 
         />
       )}
@@ -108,7 +108,7 @@ export function Navbar({ className = "" }: NavbarProps) {
           fixed top-0 left-0 h-full bg-gray-800 border-r border-gray-700 z-40 transition-all duration-300 ease-in-out flex flex-col
           ${isOpen ? "translate-x-0" : "-translate-x-full"}
           ${isCollapsed ? "w-20" : "w-72"}
-          md:translate-x-0 md:static md:z-auto
+          lg:translate-x-0 lg:static lg:z-auto
           ${className}
         `}
       >
@@ -135,7 +135,7 @@ export function Navbar({ className = "" }: NavbarProps) {
           {/* Desktop collapse button */}
           <button
             onClick={toggleCollapse}
-            className="hidden md:flex p-1.5 rounded-md hover:bg-gray-700 transition-all duration-200 cursor-pointer"
+            className="hidden lg:flex p-1.5 rounded-md hover:bg-gray-700 transition-all duration-200 cursor-pointer"
             aria-label={isCollapsed ? "Expand sidebar" : "Collapse sidebar"}
           >
             {isCollapsed ? (
