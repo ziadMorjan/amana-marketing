@@ -73,15 +73,15 @@ export default function CampaignView() {
       {/* Main Content Area */}
       <div className="flex-1 flex flex-col transition-all duration-300 ease-in-out">
         {/* Hero Section */}
-        <section className="bg-gradient-to-r from-gray-800 to-gray-700 text-white py-12">
-          <div className="px-6 lg:px-8">
+        <section className="bg-gradient-to-r from-gray-800 to-gray-700 text-white py-8 sm:py-12">
+          <div className="px-4 sm:px-6 lg:px-8">
             <div className="text-center">
               {error ? (
-                <div className="bg-red-900 border border-red-700 text-red-200 px-4 py-3 rounded mb-4 max-w-2xl mx-auto">
+                <div className="bg-red-900 border border-red-700 text-red-200 px-3 sm:px-4 py-3 rounded mb-4 max-w-2xl mx-auto text-sm sm:text-base">
                   Error loading data: {error}
                 </div>
               ) : (
-                <h1 className="text-3xl md:text-5xl font-bold">
+                <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold">
                   Campaign Performance
                 </h1>
               )}
@@ -90,16 +90,16 @@ export default function CampaignView() {
         </section>
 
         {/* Content Area */}
-        <div className="flex-1 p-4 lg:p-6 overflow-y-auto">
+        <div className="flex-1 p-3 sm:p-4 lg:p-6 overflow-y-auto">
           {marketingData && (
             <>
               {/* Filters Section */}
-              <div className="mb-8">
-                <div className="flex items-center mb-4">
-                  <Filter className="h-5 w-5 text-gray-400 mr-2" />
-                  <h2 className="text-lg font-semibold text-white">Filters</h2>
+              <div className="mb-6 sm:mb-8">
+                <div className="flex items-center mb-3 sm:mb-4">
+                  <Filter className="h-4 w-4 sm:h-5 sm:w-5 text-gray-400 mr-2" />
+                  <h2 className="text-base sm:text-lg font-semibold text-white">Filters</h2>
                 </div>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-3 sm:gap-4">
                   <SearchFilter
                     title="Campaign Name"
                     placeholder="Search campaigns..."
