@@ -1,12 +1,27 @@
 import { MarketingData, ApiResponse } from '../types/marketing';
 
-const API_BASE_URL = process.env.NODE_ENV === 'production' 
-  ? process.env.NEXT_PUBLIC_API_URL || ''
-  : 'http://localhost:3002';
+// Function to get the correct base URL for API calls
+function getApiBaseUrl(): string {
+  // In production, use the environment variable
+  if (process.env.NODE_ENV === 'production') {
+    return process.env.NEXT_PUBLIC_API_URL || '';
+  }
+  
+  // For server-side rendering in development
+  if (typeof window === 'undefined') {
+    return 'http://localhost:3000';
+  }
+  
+  // For client-side in development
+  return '';
+}
 
 export async function fetchMarketingData(): Promise<MarketingData> {
   try {
-    const response = await fetch(`${API_BASE_URL}/api/marketing-data`, {
+    const baseUrl = getApiBaseUrl();
+    const url = `${baseUrl}/api/marketing-data`;
+    
+    const response = await fetch(url, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
