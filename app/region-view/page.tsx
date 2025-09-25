@@ -1,13 +1,26 @@
 "use client";
 import { useState, useEffect, useMemo } from 'react';
+import dynamic from 'next/dynamic'; // Import dynamic
 import { fetchMarketingData } from '../../src/lib/api';
 import { MarketingData, Campaign, RegionalPerformance } from '../../src/types/marketing';
 import { Navbar } from '../../src/components/ui/navbar';
 import { Footer } from '../../src/components/ui/footer';
 import { CardMetric } from '../../src/components/ui/card-metric';
-import { BubbleMap } from '../../src/components/ui/bubble-map'; // New Component
 import { Table } from '../../src/components/ui/table';
 import { MapPin, DollarSign, TrendingUp, MousePointerClick } from 'lucide-react';
+
+// --- START: DYNAMIC IMPORT ---
+// Dynamically import BubbleMap with SSR turned off
+const BubbleMap = dynamic(() => import('../../src/components/ui/bubble-map').then(mod => mod.BubbleMap), {
+  ssr: false,
+  loading: () => (
+    <div className="h-[450px] bg-gray-800 rounded-lg flex items-center justify-center p-6 border border-gray-700">
+      <p className="text-gray-400">Loading Map...</p>
+    </div>
+  ),
+});
+// --- END: DYNAMIC IMPORT ---
+
 
 // Approximate coordinates for regions in the dataset
 const regionCoordinates: { [key: string]: { lat: number; lng: number } } = {
@@ -119,7 +132,6 @@ export default function RegionView() {
                 <CardMetric title="Total Clicks" value={marketingData.marketing_stats.total_clicks.toLocaleString()} icon={<MousePointerClick className="h-5 w-5" />} />
               </div>
 
-              {/* Updated Section: Using BubbleMap */}
               <div className="grid grid-cols-1 xl:grid-cols-2 gap-6 mb-8">
                 <BubbleMap
                   title="Revenue by Region"
