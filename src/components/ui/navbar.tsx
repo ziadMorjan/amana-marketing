@@ -11,7 +11,7 @@ import {
   Users,
   Calendar,
   MapPin,
-  BarChart3
+  Smartphone // Added new icon
 } from 'lucide-react';
 
 interface NavigationItem {
@@ -33,6 +33,7 @@ const navigationItems: NavigationItem[] = [
   { id: "demographic-view", name: "Demographic View", icon: Users, href: "/demographic-view" },
   { id: "weekly-view", name: "Weekly View", icon: Calendar, href: "/weekly-view" },
   { id: "region-view", name: "Region View", icon: MapPin, href: "/region-view" },
+  { id: "device-view", name: "Device View", icon: Smartphone, href: "/device-view" }, // New navigation item
 ];
 
 export function Navbar({ className = "" }: NavbarProps) {
@@ -41,7 +42,6 @@ export function Navbar({ className = "" }: NavbarProps) {
   const [isOpen, setIsOpen] = useState(false);
   const [isCollapsed, setIsCollapsed] = useState(false);
   
-  // Determine active item based on current pathname
   const getActiveItem = (currentPath: string) => {
     const currentItem = navigationItems.find(item => item.href === currentPath);
     return currentItem ? currentItem.id : "overview";
@@ -49,12 +49,10 @@ export function Navbar({ className = "" }: NavbarProps) {
   
   const [activeItem, setActiveItem] = useState(() => getActiveItem(pathname));
 
-  // Update active item when pathname changes
   useEffect(() => {
     setActiveItem(getActiveItem(pathname));
   }, [pathname]);
 
-  // Auto-open sidebar on desktop
   useEffect(() => {
     const handleResize = () => {
       if (window.innerWidth >= 1024) {
